@@ -7,8 +7,11 @@ STARTUP GUIDE
 First run StoreBackEnd and RefreshJWTToken
 
 Then go to the StoreFront folder and run vsCode in it and in PowerShell run 2 commands:
+
 npm install http-server-spa -g
+
 Go to the Index.html file and type the second command
+
 http-server-spa . ./index.html
 
 Enjoy the project!
