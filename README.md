@@ -14,4 +14,7 @@ Go to the Index.html file and type the second command
 
 http-server-spa . ./index.html
 
+click the link in your browser:
+localhost:8080
+
 Enjoy the project!
