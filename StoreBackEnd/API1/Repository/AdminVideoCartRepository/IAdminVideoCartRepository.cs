@@ -6,8 +6,7 @@ namespace API1.Repository.AdminVideoCartRepository
 {
     public interface IAdminVideoCartRepository : IAdminRepository
     {
-        Task<bool> RemoveVideocartCart(int id);
-        Task<bool> AddVideoCart(VideoCartViewModel videoCart);
-        Task<bool> UpdateVideoCart(VideoCartViewModel videoCart);
+        Task<bool> RemoveVideocartCartAcync(int id);
+        Task<bool> CreateVideoCartAcync(CreateVideocartViewModel videoCart);
     }
 }

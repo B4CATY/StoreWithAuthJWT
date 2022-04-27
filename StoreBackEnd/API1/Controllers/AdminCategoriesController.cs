@@ -1,12 +1,15 @@
 ﻿using API1.Models;
 using API1.Repository.AdminCategoryRepository;
+using API1.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace API1.Controllers
 {
-    [Route("admin/categorise")]
+    [Authorize(Roles = "admin")]
+    [Route("admin/categories")]
     [ApiController]
     public class AdminCategoriesController : ControllerBase
     {
@@ -18,25 +21,24 @@ namespace API1.Controllers
         // POST: /VideoCarts/create
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateNewVideoCart(string name)
+        public async Task<IActionResult> CreateNewVideoCartAcync(CreateCategoryViewModel model)
         {
-            var isSucces = await _adminVideoCartRepository.AddCategory(name);
+            var isSucces = await _adminVideoCartRepository.CreateCategoryAcync(model.Name);
             if (isSucces)
-                return Ok();
+                return NoContent();
 
-            return BadRequest();
+            return BadRequest(new{ error = "This category has already exist" });
         }
 
         // DELETE: /VideoCarts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteVideoCart([FromBody] int id)
+        public async Task<IActionResult> DeleteVideoCartAcync(/*[FromBody] */int id)
         {
-            var isRemove = await _adminVideoCartRepository.RemoveCategoryById(id);
+            var isRemove = await _adminVideoCartRepository.RemoveCategoryByIdAcync(id);
             if (!isRemove)
-            {
                 return NotFound();
-            }
-            return Ok();
+            
+            return NoContent();
         }
     }
 }

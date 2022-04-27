@@ -5,7 +5,7 @@ namespace API1.Repository.AdminCategoryRepository
 {
     public interface IAdminCategoryRepository : IAdminRepository
     {
-        Task<bool> AddCategory(string nameCategory);
-        Task<bool> RemoveCategoryById(int id);
+        Task<bool> CreateCategoryAcync(string nameCategory);
+        Task<bool> RemoveCategoryByIdAcync(int id);
     }
 }

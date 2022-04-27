@@ -12,7 +12,7 @@ namespace API1.Models
         [DisplayName("Category Name")]
         [Required]
         public string Name { get; set; }
-        //[JsonIgnore]
+        [JsonIgnore]
         public virtual ICollection<VideoCart> VideoCarts { get; set; }
     }
 }

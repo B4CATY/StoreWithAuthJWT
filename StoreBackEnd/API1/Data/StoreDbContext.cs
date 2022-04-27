@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace API1.Data
 {
-    public class VideoCardDbContext : DbContext
+    public class StoreDbContext : DbContext
     {
-        public VideoCardDbContext(DbContextOptions<VideoCardDbContext> options) : base(options)
+        public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options)
         {
             //Database.EnsureDeleted();
             CreateIfEmpty();
@@ -40,7 +40,9 @@ namespace API1.Data
                 entity.Property(e => e.Id).HasColumnName("Id");
                 entity.HasOne(p => p.User)
                     .WithMany(t => t.Orders)
-                    .HasForeignKey(p => p.UserId);
+                    .HasForeignKey(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
             });
 
             modelBuilder.Entity<VideoCart>(entity =>
@@ -58,6 +60,10 @@ namespace API1.Data
                 entity.Property(e => e.NameProduct)
                     .HasMaxLength(30)
                     .HasColumnName("name_product");
+                entity.HasOne(p => p.Category)
+                    .WithMany(t => t.VideoCarts)
+                    .HasForeignKey(p => p.Categoryid)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(e => e.Price).HasColumnName("price");
 
@@ -95,28 +101,32 @@ namespace API1.Data
                 {
                     Category = cat,
                     NameProduct = "GIGABYTE GeForce RTX 3060",
-                    Price = 25866
+                    Price = 25866,
+                    Img = "https://hotline.ua/img/tx/284/284852339_s265.jpg"
                 };
                 var video1g = new VideoCart
                 {
                     Category = cat,
                     
                     NameProduct = "GIGABYTE GeForce RTX 3070",
-                    Price = 37700
+                    Price = 37700,
+                    Img = "https://hotline.ua/img/tx/282/282942323_s265.jpg"
                 };
                 var video2g = new VideoCart
                 {
                     Category = cat,
                     
                     NameProduct = "GIGABYTE GeForce RTX 3080",
-                    Price = 42700
+                    Price = 42700,
+                    Img = "https://hotline.ua/img/tx/300/300868961_s265.jpg"
                 };
                 var video3g = new VideoCart
                 {
                     Category = cat,
                     
                     NameProduct = "GIGABYTE GeForce RTX 3090",
-                    Price = 50720
+                    Price = 50720,
+                    Img = "https://hotline.ua/img/tx/236/236802803_s265.jpg"
                 };
 
                 var videoa = new VideoCart
@@ -124,28 +134,32 @@ namespace API1.Data
                     Category = cat1,
                     
                     NameProduct = "ASUS GeForce RTX 3060",
-                    Price = 27866
+                    Price = 27866,
+                    Img = "https://hotline.ua/img/tx/289/289729776_s265.jpg"
                 };
                 var video1a = new VideoCart
                 {
                     Category = cat1,
                     
                     NameProduct = "ASUS GeForce RTX 3070",
-                    Price = 36660
+                    Price = 36660,
+                    Img = "https://hotline.ua/img/tx/283/283140768_s265.jpg"
                 };
                 var video2a = new VideoCart
                 {
                     Category = cat1,
                     
                     NameProduct = "ASUS GeForce RTX 3080",
-                    Price = 42700
+                    Price = 42700,
+                    Img = "https://hotline.ua/img/tx/294/294960059_s265.jpg"
                 };
                 var video3a = new VideoCart
                 {
                     Category = cat1,
                     
                     NameProduct = "ASUS GeForce RTX 3090",
-                    Price = 50700
+                    Price = 50700,
+                    Img = "https://hotline.ua/img/tx/238/238304963_s265.jpg"
                 };
 
 
@@ -158,28 +172,32 @@ namespace API1.Data
                     Category = cat2,
                     
                     NameProduct = "Palit GeForce RTX 3060",
-                    Price = 24866
+                    Price = 24866,
+                    Img = "https://hotline.ua/img/tx/322/322393285_s265.jpg"
                 };
                 var video1p = new VideoCart
                 {
                     Category = cat2,
                     
                     NameProduct = "Palit GeForce RTX 3070",
-                    Price = 37660
+                    Price = 37660,
+                    Img = "https://hotline.ua/img/tx/282/282630067_s265.jpg"
                 };
                 var video2p = new VideoCart
                 {
                     Category = cat2,
                     
                     NameProduct = "Palit GeForce RTX 3080",
-                    Price = 43700
+                    Price = 43700,
+                    Img = "https://hotline.ua/img/tx/321/321562084_s265.jpg"
                 };
                 var video3p = new VideoCart
                 {
                     Category = cat2,
                     
                     NameProduct = "Palit GeForce RTX 3090",
-                    Price = 51700
+                    Price = 51700,
+                    Img = "https://hotline.ua/img/tx/236/236819076_s265.jpg"
                 };
 
                 var cat3 = new Category { Name = "MSI" };
@@ -189,28 +207,32 @@ namespace API1.Data
                     Category = cat3,
                     
                     NameProduct = "MSI GeForce RTX 3060",
-                    Price = 22866
+                    Price = 22866,
+                    Img = "https://hotline.ua/img/tx/265/265996220_s265.jpg"
                 };
                 var video1m = new VideoCart
                 {
                     Category = cat3,
                     
                     NameProduct = "MSI GeForce RTX 3070",
-                    Price = 38660
+                    Price = 38660,
+                    Img = "https://hotline.ua/img/tx/286/286738254_s265.jpg"
                 };
                 var video2m = new VideoCart
                 {
                     Category = cat3,
                     
                     NameProduct = "MSI GeForce RTX 3080",
-                    Price = 45700
+                    Price = 45700,
+                    Img = "https://hotline.ua/img/tx/282/282630430_s265.jpg"
                 };
                 var video3m = new VideoCart
                 {
                     Category = cat3,
                     
                     NameProduct = "MSI GeForce RTX 3090",
-                    Price = 55700
+                    Price = 55700,
+                    Img = "https://hotline.ua/img/tx/236/236802765_s265.jpg"
                 };
 
                 Videocarts.AddRange(new List<VideoCart> { videog, video1g, video2g, video3g });
