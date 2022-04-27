@@ -9,68 +9,56 @@ namespace API1.Repository.AdminVideoCartRepository
 {
     public class AdminVideoCartRepository : IAdminVideoCartRepository
     {
-        private readonly VideoCardDbContext _context;
-        public AdminVideoCartRepository(VideoCardDbContext context)
+        private readonly StoreDbContext _context;
+        public AdminVideoCartRepository(StoreDbContext context)
         {
             _context = context;
         }
-        public async Task<bool> RemoveVideocartCart(int id)
+        public async Task<bool> RemoveVideocartCartAcync(int id)
         {
-            var videoCart = await _context.Videocarts.FindAsync(id);
+            var videoCart = await _context.Videocarts.FirstOrDefaultAsync(x=>x.Id == id);
             if (videoCart != null)
             {
                 _context.Videocarts.Remove(videoCart);
-                await SaveChanges();
+                await SaveChangesAsync();
                 
                 return true;
             }
             return false;
 
         }
-        public async Task<bool> AddVideoCart(VideoCartViewModel videoCart)
-        {
-            var category = GetCategoryByName(videoCart.Category);
-            if(category != null)
-            {
-                VideoCart videoCartDb = new VideoCart
-                {
-                    NameProduct = videoCart.Name,
-                    Price = videoCart.Price,
-                    Category = category,
-                };
-                _context.Videocarts.Add(videoCartDb);
-                await SaveChanges();
-                return true;
-            }
-            return false;
 
-        }
-
-        public async Task<bool> UpdateVideoCart(VideoCartViewModel videoCart)
+        public async Task<bool> CreateVideoCartAcync(CreateVideocartViewModel videoCart)
         {
-            
-            var videoCartDb = _context.Videocarts.Include(s => s.Category).FirstOrDefault(x => x.Id == videoCart.Id);
-            if (videoCartDb != null)
+            var category = await _context.Categories.FirstOrDefaultAsync(x=> x.Id == videoCart.CategoryId);
+            if (category != null)
             {
-                if(videoCartDb.Category.Name != videoCart.Category)
+                var videoCartDb = await _context.Videocarts.FirstOrDefaultAsync(x => x.NameProduct == videoCart.Name);
+                if (videoCartDb == null)
                 {
-                    videoCartDb.Category = GetCategoryByName(videoCart.Category);
+                    VideoCart newVideoCartDb = new VideoCart
+                    {
+                        NameProduct = videoCart.Name,
+                        Price = videoCart.Price,
+                        Category = category,
+                        Img = videoCart.Img,
+                    };
+
+                    _context.Videocarts.Add(newVideoCartDb);
+                    await SaveChangesAsync();
+                    return true;
                 }
-                videoCartDb.NameProduct = videoCart.Name;
-                videoCartDb.Price = videoCart.Price;
-                _context.Videocarts.Update(videoCartDb);
-                await SaveChanges();
-                return true;
             }
             return false;
+
         }
-        public async Task<int> SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }
-        public Category GetCategoryByName(string name)
+        public async Task<Category> GetCategoryByNameAsync(string name)
         {
-            return _context.Categories.FirstOrDefault(context => context.Name == name);
+            return await _context.Categories.FirstOrDefaultAsync(context => context.Name == name);
         }
 
         

@@ -7,8 +7,10 @@ namespace API1.Repository.VideoCartRepository
 {
     public interface IVideoCartRepository
     {
-        VideoCartViewModel GetVideoCart(int id);
-        Task<List<VideoCart>> GetAllVideoCarts();
-        
+        Task<int> GetCountVideoCartAsync();
+        Task<List<VideoCartViewModel>> GetAllVideoCartsAsync(int pageNumber, int pageSize);
+        Task<List<GetVideocartBaseInfoViewModel>> GetListVideoCartsAsync();
+        Task<VideoCartViewModel> GetVideoCartByIdAcync(int id);
+
     }
 }

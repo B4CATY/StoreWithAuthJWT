@@ -14,6 +14,7 @@ namespace API1.Models
         public string NameProduct { get; set; }
         [Required]
         public int Price { get; set; }
+        public string? Img { get; set; }
         [JsonIgnore]
         public virtual Category? Category { get; set; }
         [JsonIgnore]

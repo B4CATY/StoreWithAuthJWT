@@ -5,7 +5,7 @@ namespace API1.Repository
 {
     public interface IAdminRepository
     {
-        Category GetCategoryByName(string name);
-        Task<int> SaveChanges();
+        Task<Category> GetCategoryByNameAsync(string name);
+        Task<int> SaveChangesAsync();
     }
 }

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using API1.Data;
-using API1.Models;
-using API1.ViewModels;
 using API1.Repository.VideoCartRepository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API1.Controllers
 {
-    [Route("[controller]")]
+    //[Authorize]
     [ApiController]
     public class VideoCartsController : ControllerBase
     {
@@ -23,34 +16,58 @@ namespace API1.Controllers
             _videoCartRepository = videoCartRepository;
         }
 
-        // GET: /VideoCarts
+        // GET: /VideoCarts/pageNum
         [HttpGet]
-        public async Task<IActionResult> GetVideocarts()
+        [Route("[controller]/{pageNumber:int}/{pageSize?}")]
+        public async Task<IActionResult> GetVideocartsAsync(int pageNumber, int pageSize = 5)
         {
-            var videoCarts = await _videoCartRepository.GetAllVideoCarts();
+
+            var videoCarts = (pageNumber-1) * pageSize + 1 > await _videoCartRepository.GetCountVideoCartAsync() ? null : await _videoCartRepository.GetAllVideoCartsAsync(pageNumber, pageSize);
             if(videoCarts == null)
                 return NoContent();
 
             return Ok(videoCarts);
         }
 
-        // GET: /VideoCarts/5
-        [HttpGet("{id}")]
-        public IActionResult GetVideoCart(int id)
+        [HttpGet]
+        [Route("videocart/{id}")]
+        public async Task<IActionResult> GetVideocartAsync(int id)
         {
-            var videoCart = _videoCartRepository.GetVideoCart(id);
-            
+
+            var videoCart = await _videoCartRepository.GetVideoCartByIdAcync(id); 
             if (videoCart == null)
-            {
-                return NotFound();
-            }
+                return NoContent();
 
             return Ok(videoCart);
         }
-        
-        
-        
 
-        
+        //[Authorize(Roles = "admin")]
+        // GET: /VideoCarts/5
+        [HttpGet]
+        [Route("[controller]/count")]
+        public async Task<IActionResult> GetCountVideoCartAsync()
+        {
+            var videoCart = await _videoCartRepository.GetCountVideoCartAsync();
+             var obCount = new
+             {
+                 Count = videoCart,
+             };
+            return Ok(obCount);
+        }
+        [HttpGet]
+        [Route("[controller]")]
+        public async Task<IActionResult> GetAllVideocartsAsync()
+        {
+
+            var videoCarts = await _videoCartRepository.GetListVideoCartsAsync();
+            if (videoCarts == null)
+                return NoContent();
+
+            return Ok(videoCarts);
+        }
+
+
+
+
     }
 }

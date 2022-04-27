@@ -8,44 +8,48 @@ namespace API1.Repository.AdminCategoryRepository
 {
     public class AdminCategoryRepository : IAdminCategoryRepository
     {
-        private readonly VideoCardDbContext _context;
-        public AdminCategoryRepository(VideoCardDbContext context)
+        private readonly StoreDbContext _context;
+        public AdminCategoryRepository(StoreDbContext context)
         {
             _context = context;
         }
-        public async Task<bool> AddCategory(string nameCategory)
+        public async Task<bool> CreateCategoryAcync(string nameCategory)
         {
             if(nameCategory == null) return false;
 
-            var categoryCheck = GetCategoryByName(nameCategory);
-            var category = new Category { Name = nameCategory };
-            if(categoryCheck == null)
+            var categoryCheck = await GetCategoryByNameAsync(nameCategory);
+            if (categoryCheck == null)
             {
+                Category category = new Category { Name = nameCategory };
+
                 _context.Categories.Add(category);
-                await SaveChanges();
+                await SaveChangesAsync();
+                return true;
             }
-            return true;
+            return false;
         }
 
         
 
-        public async Task<bool> RemoveCategoryById(int id)
+        public async Task<bool> RemoveCategoryByIdAcync(int id)
         {
-            var category = _context.Categories.FirstOrDefault(x => x.Id == id);
-            if (category == null) return false;
+            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            if (category == null) 
+                return false;
 
             _context.Categories.Remove(category);
-            await SaveChanges();
+            await SaveChangesAsync();
             return true;
         }
 
-        public async Task<int> SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }
-        public Category GetCategoryByName(string name)
+        public async Task<Category> GetCategoryByNameAsync(string name)
         {
-            return _context.Categories.FirstOrDefault(x => x.Name == name);
+            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Name == name);
+            return category;
         }
     }
 }
